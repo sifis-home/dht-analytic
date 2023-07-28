@@ -1,0 +1,6 @@
+requests
+joblib
+numpy
+scipy
+scikit-learn
+websocket-client
