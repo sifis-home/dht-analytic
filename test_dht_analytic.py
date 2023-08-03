@@ -102,6 +102,15 @@ def test_send_results_async():
     assert True
 
 
+def test_send_results():
+    assert (
+        send_results.send_results(
+            "1234567890", "1234567890", "{}", "Correct Invocation"
+        )
+        == "Data Sent"
+    )
+
+
 """
 
 def test_send_results_async():
