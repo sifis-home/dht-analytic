@@ -1,10 +1,12 @@
 import json
 import os
 
+import mock
 import websocket
 
 import send_results
 from classification_server import transform_json_to_instance
+from send_results import send_results
 
 MODEL_PATH = "model.joblib"
 
@@ -102,13 +104,16 @@ def test_send_results_async():
     assert True
 
 
-def test_send_results():
+@mock.patch("send_results.publish_thread")
+def test_send_results(mock_publish_thread):
+    mock_publish_thread.return_value = "Data Sent"
+
     assert (
-        send_results.send_results(
-            "1234567890", "1234567890", "{}", "Correct Invocation"
-        )
+        send_results("1234567890", "1234567890", "{}", "Correct Invocation")
         == "Data Sent"
     )
+
+    mock_publish_thread.assert_called_once()
 
 
 """
