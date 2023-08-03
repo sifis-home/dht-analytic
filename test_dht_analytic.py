@@ -3,10 +3,7 @@ import json
 import joblib
 import websocket
 
-from classification_server import (
-    predict_instance,
-    transform_json_to_instance,
-)
+from classification_server import predict_instance, transform_json_to_instance
 
 MODEL_PATH = "model.joblib"
 
@@ -75,6 +72,7 @@ def test_transform_json_to_instance():
 
 
 def test_predict_instance():
+    model = joblib.load(MODEL_PATH)
     instance = [1, 0, 1, 0, 1, 0, 1, 0, 1]
     prediction = predict_instance(MODEL_PATH, instance)
     assert prediction == 0
