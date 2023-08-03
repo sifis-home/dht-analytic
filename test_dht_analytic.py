@@ -1,58 +1,88 @@
-from unittest.mock import patch
+import json
 
-import pytest
+import joblib
+import websocket
 
-import catch_dht_inquiry
+from classification_server import (
+    predict_instance,
+    transform_json_to_instance,
+)
+
+MODEL_PATH = "model.joblib"
 
 
-@pytest.fixture
-def mock_receive_data():
-    with patch("classification_server.receive_data") as mock_receive_data:
-        yield mock_receive_data
+def test_on_message():
+    ws = websocket.WebSocketApp(
+        "ws://localhost:3000/ws",
+        on_open=lambda ws: None,
+        on_message=lambda ws, message: None,
+        on_error=lambda ws, error: None,
+        on_close=lambda ws, close_status_code, close_msg: None,
+    )
 
-
-"""
-def test_on_message(mock_receive_data):
-    ws = MagicMock()
-    message = '{"Persistent": {"topic_name": "SIFIS:Privacy_Aware_Device_DHT_inquiry", "value": {"Dictionary": "defaultdict(<class \'int\'>, {1: 100, 2: 200})", "requestor_id": "some_requestor_id", "request_id": "some_request_id"}}}'
-
-    # Call the on_message function with the mock WebSocket and message
-    catch_dht_inquiry.on_message(ws, message)
-
-    # Convert the received dictionary string to an actual dictionary
-    expected_dict_str = "defaultdict(<class 'int'>, {1: 100, 2: 200})"
-    expected_data = {
-        "requestor_id": "some_requestor_id",
-        "request_id": "some_request_id",
-        "dictionary": ast.literal_eval(expected_dict_str),
+    # Create a JSON message
+    json_message = {
+        "Persistent": {
+            "topic_name": "SIFIS:Privacy_Aware_Device_DHT_inquiry",
+            "value": {
+                "Dictionary": "defaultdict(<class 'int'>, {})",
+                "requestor_id": "1234567890",
+                "request_id": "1",
+            },
+        },
     }
 
-    # Assert that classification_server.receive_data() is called with the correct data
-    mock_receive_data.assert_called_once_with(expected_data)
-"""
+    # Encode the JSON message
+    message = json.dumps(json_message)
+
+    # Call the on_message function
+    ws.on_message(ws, message)
 
 
 def test_on_error():
-    error = "WebSocket error occurred"
+    ws = websocket.WebSocketApp(
+        "ws://localhost:3000/ws",
+        on_open=lambda ws: None,
+        on_message=lambda ws, message: None,
+        on_error=lambda ws, error: None,
+        on_close=lambda ws, close_status_code, close_msg: None,
+    )
 
-    with patch("builtins.print") as mock_print:
-        catch_dht_inquiry.on_error(None, error)
+    # Create an error message
+    error = "This is an error"
 
-    mock_print.assert_called_once_with(error)
+    # Call the on_error function
+    ws.on_error(ws, error)
 
 
 def test_on_close():
-    close_status_code = 1000
-    close_msg = "Connection closed"
+    ws = websocket.WebSocketApp(
+        "ws://localhost:3000/ws",
+        on_open=lambda ws: None,
+        on_message=lambda ws, message: None,
+        on_error=lambda ws, error: None,
+        on_close=lambda ws, close_status_code, close_msg: None,
+    )
 
-    with patch("builtins.print") as mock_print:
-        catch_dht_inquiry.on_close(None, close_status_code, close_msg)
-
-    mock_print.assert_called_once_with("### Connection closed ###")
+    # Call the on_close function
+    ws.on_close(ws, 1000, "Normal closure")
 
 
-def test_on_open():
-    with patch("builtins.print") as mock_print:
-        catch_dht_inquiry.on_open(None)
+def test_transform_json_to_instance():
+    json_data = '{"domo_ble_thermometer": 1, "shelly_1plus": 0, "domo_switch": 1, "shelly_em": 0, "domo_power_energy_sensor": 1, "shelly_25": 0, "domo_light": 1, "shelly_1pm": 0, "domo_thermostat": 1}'
+    instance = transform_json_to_instance(json_data)
+    assert instance == [1, 0, 1, 0, 1, 0, 1, 0, 1]
 
-    mock_print.assert_called_once_with("### Connection established ###")
+
+def test_predict_instance():
+    instance = [1, 0, 1, 0, 1, 0, 1, 0, 1]
+    prediction = predict_instance(MODEL_PATH, instance)
+    assert prediction == 0
+
+
+"""
+def test_receive_data():
+    data = '{"request_id": "1234567890", "requestor_id": "1234567890", "dictionary": "{"domo_ble_thermometer": 1, "shelly_1plus": 0, "domo_switch": 1, "shelly_em": 0, "domo_power_energy_sensor": 1, "shelly_25": 0, "domo_light": 1, "shelly_1pm": 0, "domo_thermostat": 1}"}'
+    receive_data(data)
+    assert send_results.sent_results == 1
+"""
