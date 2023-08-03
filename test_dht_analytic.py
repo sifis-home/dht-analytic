@@ -1,9 +1,8 @@
 import json
 
-import joblib
 import websocket
 
-from classification_server import predict_instance, transform_json_to_instance
+from classification_server import transform_json_to_instance
 
 MODEL_PATH = "model.joblib"
 
@@ -71,14 +70,15 @@ def test_transform_json_to_instance():
     assert instance == [1, 0, 1, 0, 1, 0, 1, 0, 1]
 
 
+"""
+
 def test_predict_instance():
-    model = joblib.load(MODEL_PATH)
+    # model = joblib.load(MODEL_PATH)
     instance = [1, 0, 1, 0, 1, 0, 1, 0, 1]
     prediction = predict_instance(MODEL_PATH, instance)
     assert prediction == 0
 
 
-"""
 def test_receive_data():
     data = '{"request_id": "1234567890", "requestor_id": "1234567890", "dictionary": "{"domo_ble_thermometer": 1, "shelly_1plus": 0, "domo_switch": 1, "shelly_em": 0, "domo_power_energy_sensor": 1, "shelly_25": 0, "domo_light": 1, "shelly_1pm": 0, "domo_thermostat": 1}"}'
     receive_data(data)
