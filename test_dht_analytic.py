@@ -54,6 +54,21 @@ def test_on_error():
     ws.on_error(ws, error)
 
 
+def test_on_open():
+    ws = websocket.WebSocketApp(
+        "ws://localhost:3000/ws",
+        on_open=lambda ws: None,
+        on_message=lambda ws, message: None,
+        on_error=lambda ws, error: None,
+        on_close=lambda ws, close_status_code, close_msg: None,
+    )
+    # Assert that the on_open callback is called
+    assert ws.on_open(ws) == None
+
+    # Close the websocket connection
+    ws.close()
+
+
 def test_on_close():
     ws = websocket.WebSocketApp(
         "ws://localhost:3000/ws",
