@@ -48,8 +48,12 @@ def receive_data(data):
     try:
         dictionary = dictionary.replace(")", "")
         dictionary = dictionary.replace("'", '"')
+        handle_dictionary(data, dictionary, request_id, requestor_id)
     except:
         pass
+
+
+def handle_dictionary(data, dictionary, request_id, requestor_id):
     print("Received: " + str(dictionary))
     instance = transform_json_to_instance(dictionary)
     prediction = predict_instance(MODEL_PATH, instance)

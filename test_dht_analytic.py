@@ -69,6 +69,37 @@ def test_on_open():
     ws.close()
 
 
+import json
+
+from classification_server import receive_data
+
+
+def test_receive_data():
+    data = """
+        {
+            'request_id': '1234567890',
+            'requestor_id': '1234567890',
+            'dictionary': {
+                'domo_ble_thermometer': 1,
+                'shelly_1plus': 0,
+                'domo_switch': 1,
+                'shelly_em': 0,
+                'domo_power_energy_sensor': 1,
+                'shelly_25': 0,
+                'domo_light': 1,
+                'shelly_1pm': 0,
+                'domo_thermostat': 1
+            }
+        }
+    """
+
+    # Call the receive_data function
+    receive_data(data.replace("\n", ""))
+
+    # Assert that the dictionary is correct
+    assert True
+
+
 def test_on_close():
     ws = websocket.WebSocketApp(
         "ws://localhost:3000/ws",
