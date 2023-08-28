@@ -6,7 +6,7 @@ import classification_server
 
 
 def on_message(ws, message):
-    print("Received:")
+    print("Received: " + message)
 
     json_message = json.loads(message)
 
@@ -20,16 +20,18 @@ def on_message(ws, message):
                 dictionary = json_message["Dictionary"]
                 requestor_id = json_message["requestor_id"]
                 request_id = json_message["request_id"]
-                dictionary = dictionary.split(
-                    "defaultdict(<class 'int'>, ", 1
-                )[1]
+                try:
+                    new_dictionary = dictionary.split(
+                        "defaultdict(<class 'int'>, ", 1
+                    )[1]
+                except:
+                    new_dictionary = dictionary.replace("'", '"')
                 data = {
                     "requestor_id": requestor_id,
                     "request_id": request_id,
-                    "dictionary": dictionary,
+                    "dictionary": new_dictionary,
                 }
-                print(data)
-                response = classification_server.receive_data(data)
+                response = classification_server.receive_data(str(data))
                 print(response)
 
 
@@ -47,7 +49,7 @@ def on_open(ws):
 
 if __name__ == "__main__":
     ws = websocket.WebSocketApp(
-        "ws://localhost:3000/ws",
+        "ws://sifis-device3.iit.cnr.it:3000/ws",
         on_open=on_open,
         on_message=on_message,
         on_error=on_error,
