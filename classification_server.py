@@ -1,14 +1,14 @@
 import json
 
 import joblib
+import requests
 
 import send_results
-
-import requests
 
 MODEL_PATH = "model.joblib"
 
 url = "http://sifis-device3.iit.cnr.it:3000/"
+
 
 def transform_json_to_instance(json_data):
     # Converti la stringa JSON in un dizionario Python
@@ -60,6 +60,7 @@ def receive_data(received_data):
         print(e)
         pass
 
+
 def send_results(result_data):
     topic_uuid = "DHT_inquiry_results"
     topic_name = "SIFIS:Privacy_Aware_Device_DHT_Results"
@@ -82,10 +83,10 @@ def handle_dictionary(data, dictionary, request_id, requestor_id):
             response = "Correct Invocation"
             print("Correct Invocation")
         data = {
-                "request_id": request_id, 
-                "requestor_id": requestor_id, 
-                "data": str(data), 
-                "response": response,
+            "request_id": request_id,
+            "requestor_id": requestor_id,
+            "data": str(data),
+            "response": response,
         }
         send_results(data)
-        return 
+        return
