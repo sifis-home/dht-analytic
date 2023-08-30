@@ -7,7 +7,7 @@ import websocket
 
 def publish_thread(request_id, requestor_id, dictionary, system_response):
     ws = websocket.WebSocketApp(
-        "ws://sifis-device3.iit.cnr.it:3000/ws",
+        "ws://localhost:3000/ws",
         on_open=on_open,
         on_error=on_error,
         on_close=on_close,

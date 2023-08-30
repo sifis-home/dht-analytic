@@ -49,7 +49,7 @@ def on_open(ws):
 
 if __name__ == "__main__":
     ws = websocket.WebSocketApp(
-        "ws://sifis-device3.iit.cnr.it:3000/ws",
+        "ws://localhost:3000/ws",
         on_open=on_open,
         on_message=on_message,
         on_error=on_error,

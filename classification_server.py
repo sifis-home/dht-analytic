@@ -7,7 +7,7 @@ import send_results
 
 MODEL_PATH = "model.joblib"
 
-url = "http://sifis-device3.iit.cnr.it:3000/"
+url = "http://localhost:3000/"
 
 
 def transform_json_to_instance(json_data):
