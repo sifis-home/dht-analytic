@@ -11,10 +11,12 @@ WORKDIR /app
 COPY requirements.txt /app/requirements.txt
 
 # Copia il codice nella directory di lavoro dell'immagine Docker
-COPY catch_dht_inquiry.py /app
-COPY classification_server.py /app
-COPY send_results.py /app
-COPY model.joblib /app
+ADD dht_analytic /
+
+#COPY catch_dht_inquiry.py /app
+#COPY classification_server.py /app
+#COPY send_results.py /app
+#COPY model.joblib /app
 
 
 # Installa le dipendenze
