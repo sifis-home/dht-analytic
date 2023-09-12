@@ -3,7 +3,7 @@ import json
 import joblib
 import requests
 
-import send_results
+# import send_results
 
 MODEL_PATH = "model.joblib"
 

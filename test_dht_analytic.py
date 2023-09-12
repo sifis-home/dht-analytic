@@ -3,9 +3,10 @@ import os
 
 import websocket
 
-import send_results
-from classification_server import transform_json_to_instance
-from send_results import send_results
+# from send_results import send_results
+# from dht_analytic import *
+from dht_analytic.classification_server import transform_json_to_instance
+from dht_analytic.send_results import send_results
 
 MODEL_PATH = "model.joblib"
 
@@ -71,7 +72,7 @@ def test_on_open():
 
 import json
 
-from classification_server import receive_data
+from dht_analytic.classification_server import receive_data
 
 
 def test_receive_data():

@@ -1,8 +1,7 @@
 import json
 
-import websocket
-
 import classification_server
+import websocket
 
 
 def on_message(ws, message):
