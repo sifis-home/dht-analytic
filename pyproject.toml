@@ -11,9 +11,9 @@ classifiers = [
     "Natural Language :: English",
     "Programming Language :: Python :: 3 :: Only",
 ]
-include = ["README.md", "LICENSE.md", "dht-analytic/data/*"]
+include = ["README.md", "LICENSE.md", "dht_analytic/data/*"]
 packages = [
-    { include = "dht-analytic" },
+    { include = "dht_analytic" },
 ]
 
 [tool.poetry.dependencies]
